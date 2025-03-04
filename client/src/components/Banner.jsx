@@ -20,7 +20,7 @@ const Banner = () => {
             }}
         >
             {/* Left Side - Text */}
-            <Box sx={{ flex: 1, textAlign: { xs: "center", md: "left" }, ml: { xs: 2, md: 10 } }}>
+            <Box sx={{ flex: 1, textAlign: { xs: "center", md: "left" }, ml: { xs: 'auto', md: 10 },pt : {xs : 4} }}>
                 <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: 'white' }}>
                     Book Appoinment <br />With 100+ Trusted Doctors
                 </Typography>
@@ -50,7 +50,7 @@ const Banner = () => {
                     display: "flex",
                     justifyContent: { xs: "center", md: "flex-end" },
                     mt: { xs: 3, md: -4 },
-                    pr: { xs: 3, md: 10 }
+                    pr: { xs: 0, md: 10 }
                 }}
             >
                 <img

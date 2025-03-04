@@ -1,58 +1,54 @@
-import { Box, Button, Typography } from '@mui/material';
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext';
+import { Link } from 'react-router-dom';
 
-const TopDoctors = ({ isHomePage, query = null }) => {
+const RelatedDoctors = ({ docId, speciality }) => {
+    console.log({ docId, speciality });
     const { doctors } = useContext(AppContext);
-    const navigate = useNavigate();
 
-    // Filter doctors based on speciality
-    const filteredData = query ? doctors.filter((val) => val.speciality === query) : doctors;
-    
-    // Show top 10 doctors on home page
-    const modifiedDocs = isHomePage ? doctors.slice(0, 10) : filteredData;
+    const [reatedDocs, setRelatedDocs] = useState([]);
 
+    const filteredDocs = (id, speciality) => {
+        return doctors.filter((doc) => doc.speciality === speciality && doc._id !== id);
+    }
+    useEffect(() => {
+        const arr = filteredDocs(docId, speciality).slice(0,5);
+        // console.log(arr);
+        setRelatedDocs(arr);
+    }, [docId, speciality])
     return (
-        <Box 
-            id="topDoctors"
-            sx={{
-                textAlign: 'center',
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            mt: 5
+        }}>
+            <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 5,
-                my: isHomePage ? 15 : 0
-            }}
-        >
-            {/* Heading for Home Page */}
-            {isHomePage && (
-                <Box>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 3 }}>
-                        Top Doctors to Book
-                    </Typography>
-                    <Typography variant="body2">
-                        Simply browse through our extensive list of trusted doctors.
-                    </Typography>
-                </Box>
-            )}
+                justifyContent: 'center',
+                gap: 2
+            }} >
+                <Typography variant='h5'>Related Doctors</Typography>
+                <Typography variant='caption'>Simply browse through our extensive list of trusted doctors.</Typography>
 
-            {/* Doctors List */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    gap: 3,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap',
-                    overflow: 'auto',
-                    pt: isHomePage ? 3 : 0
-                }}
-            >
-                {modifiedDocs.length === 0 ? (
+            </Box>
+            <Box sx={{
+                display: 'flex',
+                gap: 3,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                overflow: 'auto',
+                pt: 5
+            }}>
+                {reatedDocs.length === 0 ? (
                     <Typography variant="h5">No doctors found</Typography>
                 ) : (
-                    modifiedDocs.map((val, index) => (
+                    reatedDocs.map((val, index) => (
                         <Box
                             key={index}
                             sx={{
@@ -70,22 +66,22 @@ const TopDoctors = ({ isHomePage, query = null }) => {
                             }}
                         >
                             <Link
-                                to={ `/appointment/${val._id}`}
+                                to={`/appointment/${val._id}`}
                                 onClick={() => window.scrollTo(0, 0)}
                                 style={{ textDecoration: 'none' }}
                             >
                                 {/* Doctor Image */}
-                                <Box 
+                                <Box
                                     sx={{
                                         backgroundColor: 'rgb(239 246 255)',
                                         borderTopLeftRadius: 10,
                                         borderTopRightRadius: 10
                                     }}
                                 >
-                                    <img 
-                                        src={val.image} 
-                                        alt={val.name} 
-                                        style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
+                                    <img
+                                        src={val.image}
+                                        alt={val.speciality}
+                                        style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                                     />
                                 </Box>
 
@@ -104,25 +100,8 @@ const TopDoctors = ({ isHomePage, query = null }) => {
                     ))
                 )}
             </Box>
+        </Box >
+    )
+}
 
-            {/* More Button for Home Page */}
-            {isHomePage && (
-                <Button
-                    variant="contained"
-                    onClick={() => { navigate('/doctors'); window.scrollTo(0, 0); }}
-                    sx={{
-                        maxWidth: '400px',
-                        width: '150px',
-                        backgroundColor: 'rgb(239 246 255)',
-                        color: 'black',
-                        borderRadius: 5
-                    }}
-                >
-                    More
-                </Button>
-            )}
-        </Box>
-    );
-};
-
-export default TopDoctors;
+export default RelatedDoctors;
