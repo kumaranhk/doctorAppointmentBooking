@@ -92,7 +92,7 @@ const Navbar = () => {
                             display: { xs: 'none', md: 'inline-flex' }, // Hide on small screens
                         }}
                     >
-                        CREATE ACCOUNT
+                        Log in
                     </Button>
                 )}
 
