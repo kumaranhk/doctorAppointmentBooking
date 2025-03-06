@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom'
 
 const SpecialityMenu = () => {
     return (
-        <Box id='speciality' sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 5,pt : 10 }}>
+        <Box id='speciality' sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 5, pt: 10 }}>
             <Box>
                 <Typography variant='h5' sx={{ fontWeight: 'bold', mb: 3 }}>Find by Speciality</Typography>
                 <Typography variant='body2'>Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.</Typography>
             </Box>
-            <Box sx={{ display: 'flex', gap: 5, alignItems: 'center', justifyContent: 'center', overflow: 'auto', pt: 3 }}>
+            <Box sx={{ display: 'flex', gap: 5, alignItems: 'center', justifyContent: { sx: 'center' }, overflow: 'auto', pt: 3 }}>
                 {specialityData.map((val, index) => (
                     <Box sx={{
                         textAlign: "center",
