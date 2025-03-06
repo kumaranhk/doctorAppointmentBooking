@@ -76,8 +76,8 @@ const Navbar = () => {
                                     </Typography>
                                 </MenuItem>
                             ))}
-                            <MenuItem onClick={() => console.log("User logged out")}>
-                                <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+                            <MenuItem onClick={() => console.log("User logged out")} >
+                                <Typography sx={{ textAlign: 'center' }}>LOG OUT</Typography>
                             </MenuItem>
                         </Menu>
                     </Box>
@@ -133,7 +133,7 @@ const Navbar = () => {
                                     <ListItemText primary="MY APPOINTMENTS" />
                                 </ListItem>
                                 <ListItem onClick={() => console.log("User logged out")}
-                                    sx={{ cursor: 'pointer', textDecoration: 'none', color: 'gray' }}>
+                                    sx={{ cursor: 'pointer', textDecoration: 'none', color: 'gray' ,textTransform : 'uppercase'}}>
                                     <ListItemText primary="LOG OUT" />
                                 </ListItem>
                             </>
