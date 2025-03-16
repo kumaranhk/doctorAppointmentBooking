@@ -3,16 +3,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import axios from "../../utils/axios";
 import axios from "axios";
+import Loader from "./Loader";
 
 const TopDoctors = ({ isHomePage, query = null }) => {
   const [doctors, setDoctors] = useState([]);
   const navigate = useNavigate();
+  const[loader ,setLoader] = useState(false);
 
   const fetchDoctors = async () => {
+    setLoader(true);
     try {
       const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users`, { params: { role: "doctor" } });
       // console.log(res.data.data);
       setDoctors(res.data.data);
+      setLoader(false);
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +69,8 @@ const TopDoctors = ({ isHomePage, query = null }) => {
           pt: isHomePage ? 3 : 0,
         }}
       >
-        {modifiedDocs.length === 0 ? (
+        {loader ? <Loader /> : 
+        modifiedDocs.length === 0 ? (
           <Typography variant="h5">No doctors found</Typography>
         ) : (
           modifiedDocs.map((val, index) => (
@@ -101,6 +106,7 @@ const TopDoctors = ({ isHomePage, query = null }) => {
                   <img
                     src={val.image}
                     alt={val.name}
+                    loading="lazy"
                     style={{
                       width: "100%",
                       height: "200px",

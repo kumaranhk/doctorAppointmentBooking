@@ -23,7 +23,7 @@ const Header = () => {
                     Book Appoinment <br />With Trusted Doctors
                 </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 , mt : {xs : 2}}}>
-                    <img src={assets.group_profiles} style={{ width: '100px' }} />
+                    <img src={assets.group_profiles} style={{ width: '100px' }} loading="lazy"/>
                     <Typography variant="body1" sx={{ color: 'white' }}>
                         Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.
                     </Typography>
@@ -59,6 +59,7 @@ const Header = () => {
                     src={assets.header_img}
                     alt="Header"
                     style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }}
+                    loading="lazy"
                 />
             </Box>
         </Box>

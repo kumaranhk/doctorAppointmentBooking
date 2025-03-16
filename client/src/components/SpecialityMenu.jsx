@@ -23,7 +23,7 @@ const SpecialityMenu = () => {
                         <Link to={`doctors/${val.speciality}`}
                             onClick={() => onscroll(0, 0)}
                             style={{ textDecoration: 'none' }}>
-                            <img src={val.image} alt={val.speciality} style={{ width: 100, marginBottom: '15px' }} />
+                            <img src={val.image} alt={val.speciality} style={{ width: 100, marginBottom: '15px' }} loading="lazy"/>
                             <Typography variant='body2' sx={{ color: 'black' }}>{val.speciality}</Typography>
                         </Link>
                     </Box>
