@@ -19,6 +19,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import axios from "../../../utils/axios";
 import { toast } from "react-toastify";
+import Loader from "../../components/Loader";
 
 const AdminDoctors = () => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(null);
@@ -40,21 +41,24 @@ const AdminDoctors = () => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [isShowFilters, setIsShowFilters] = useState(!isMobile);
   const [selectedImage, setSelectedImage] = useState(null);
+  const[loader,setLoader] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setSelectedImage(URL.createObjectURL(file)); 
+      setSelectedImage(URL.createObjectURL(file));
       setFormData({ ...formData, imageFile: file });
     }
   };
 
   const fetchDoctors = async () => {
     try {
+      setLoader(true);
       const { data } = await axios.get("/users", {
         params: { role: "doctor", specialization: selectedSpeciality },
       });
       setDoctors(data.data);
+      setLoader(false);
     } catch (error) {
       console.error("Error fetching doctors:", error);
     }
@@ -63,8 +67,8 @@ const AdminDoctors = () => {
     fetchDoctors();
   }, [selectedSpeciality]);
 
-  const openForm = async (type, id ) => {
-    if (type === "edit" ) {
+  const openForm = async (type, id) => {
+    if (type === "edit") {
       setFormType("edit");
       try {
         const { data } = await axios.get(`/users/${id}`, {
@@ -128,7 +132,7 @@ const AdminDoctors = () => {
           await axios.post("/users", formDataToSend, {
             headers: { "Content-Type": "multipart/form-data" },
           });
-          toast.success('Doctor created successfully');
+          toast.success("Doctor created successfully");
         } catch (error) {
           console.log(error);
         }
@@ -160,12 +164,11 @@ const AdminDoctors = () => {
         onClose={closeForm}
         fullWidth
         maxWidth="sm"
-        
         sx={{
           "& .MuiDialog-paper": {
             width: "95%", // Prevents overflowing
             maxWidth: "500px", // Adjust based on content
-            overflow : "hidden"
+            overflow: "hidden",
           },
         }}
       >
@@ -202,13 +205,14 @@ const AdminDoctors = () => {
             )}
 
             {/* Image Upload Input */}
-            {formType === 'created' && 
-            (<input
-              type="file"
-              accept="image/*"
-              style={{ marginLeft: isMobile ? 50 : -50 }}
-              onChange={handleImageChange}
-            />)}
+            {formType === "created" && (
+              <input
+                type="file"
+                accept="image/*"
+                style={{ marginLeft: isMobile ? 50 : -50 }}
+                onChange={handleImageChange}
+              />
+            )}
 
             {/* Other Fields */}
             {[
@@ -262,6 +266,7 @@ const AdminDoctors = () => {
         </DialogContent>
       </Dialog>
 
+      {/*Mobile filter icon  */}
       <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
         <IconButton onClick={() => setIsShowFilters(!isShowFilters)}>
           <Badge
@@ -331,62 +336,65 @@ const AdminDoctors = () => {
             my: 3,
           }}
         >
-          <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-            {doctors.length === 0 ? (
-              <Typography variant="h5">No doctors found</Typography>
-            ) : (
-              doctors.map((val) => (
-                <Box
-                  key={val._id}
-                  sx={{
-                    textAlign: "center",
-                    transition: "all 0.5s ease",
-                    border: "1px solid lightgrey",
-                    borderRadius: 2,
-                    width: { xs: "160px", sm: "180px", md: "200px" },
-                    height: "350px",
-                    "&:hover": {
-                      transform: "translateY(-10px)",
-                      boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.1)",
-                    },
-                    boxShadow: "5px 5px 5px lightgrey",
-                  }}
-                >
+          {loader ? 
+          (<Loader />) :
+            (<Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+              {doctors.length === 0 ? (
+                <Typography variant="h5">No doctors found</Typography>
+              ) : (
+                doctors.map((val) => (
                   <Box
+                    key={val._id}
                     sx={{
-                      backgroundColor: "rgb(239 246 255)",
-                      borderTopLeftRadius: 10,
-                      borderTopRightRadius: 10,
+                      textAlign: "center",
+                      transition: "all 0.5s ease",
+                      border: "1px solid lightgrey",
+                      borderRadius: 2,
+                      width: { xs: "160px", sm: "180px", md: "200px" },
+                      height: "350px",
+                      "&:hover": {
+                        transform: "translateY(-10px)",
+                        boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.1)",
+                      },
+                      boxShadow: "5px 5px 5px lightgrey",
                     }}
                   >
-                    <img
-                      src={val.image}
-                      alt={val.name}
-                      style={{
-                        width: "100%",
-                        height: "200px",
-                        objectFit: "cover",
+                    <Box
+                      sx={{
+                        backgroundColor: "rgb(239 246 255)",
+                        borderTopLeftRadius: 10,
+                        borderTopRightRadius: 10,
                       }}
-                    />
+                    >
+                      <img
+                        src={val.image}
+                        alt={val.name}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ p: 1 }}>
+                      <Typography sx={{ color: "#48bb78" }}>
+                        • Available
+                      </Typography>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {val.name}
+                      </Typography>
+                      <Typography sx={{ color: "gray" }}>
+                        {val.specialization}
+                      </Typography>
+                    </Box>
+                    <Button onClick={() => openForm("edit", val._id)}>
+                      Edit
+                    </Button>
                   </Box>
-                  <Box sx={{ p: 1 }}>
-                    <Typography sx={{ color: "#48bb78" }}>
-                      • Available
-                    </Typography>
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      {val.name}
-                    </Typography>
-                    <Typography sx={{ color: "gray" }}>
-                      {val.specialization}
-                    </Typography>
-                  </Box>
-                  <Button onClick={() => openForm("edit", val._id)}>
-                    Edit
-                  </Button>
-                </Box>
-              ))
-            )}
-          </Box>
+                ))
+              )}
+            </Box>)
+          }
         </Box>
       </Box>
     </Box>

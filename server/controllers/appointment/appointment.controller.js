@@ -132,7 +132,7 @@ const appointmentController = {
             const data = await appointmentModel.aggregate([
                 {
                     $group: {
-                        _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+                        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
                         bookedCount: { $sum: 1 },
                         cancelledCount: { $sum: { $cond: [{ $eq: ["$status", "cancelled"] }, 1, 0] } },
                         completedCount: { $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] } }

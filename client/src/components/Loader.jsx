@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Loader() {
   return (
-    <Stack direction="row">
+    <Stack direction="row" overflow={'hidden'}>
       <CircularProgress color="secondary" />
     </Stack>
   );

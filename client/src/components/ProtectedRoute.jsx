@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 
 const ProtectedRoute = ({ role, children }) => {
   const { user } = useAuth();
-  console.log(user);
+  // console.log(user);
 
   if (user === null) {
     // window.location.reload();

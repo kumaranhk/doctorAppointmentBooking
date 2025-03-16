@@ -80,6 +80,7 @@ const Banner = () => {
           src={assets.appointment_img}
           alt="Header"
           style={{ width: "100%", maxWidth: "400px", borderRadius: "10px" }}
+          loading="lazy"
         />
       </Box>
     </Box>

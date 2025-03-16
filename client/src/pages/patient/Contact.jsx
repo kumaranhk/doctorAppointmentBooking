@@ -30,7 +30,7 @@ const Contact = () => {
       >
         {/* Left portion - image */}
         <Box sx={{ maxWidth: "350px" }}>
-          <img src={assets.contact_image} style={{ width: "100%" }} />
+          <img src={assets.contact_image} style={{ width: "100%" }} loading="lazy"/>
         </Box>
 
         {/* Right portion */}

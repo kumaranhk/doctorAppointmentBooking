@@ -47,6 +47,7 @@ const About = () => {
             src={assets.about_image}
             style={{ width: "100%", height: "fill" }}
             alt="About Us"
+            loading="lazy"
           />
         </Box>
         {/* main - right portion */}
