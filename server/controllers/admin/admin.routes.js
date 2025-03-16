@@ -1,10 +1,10 @@
 import express from 'express';
-import upload from "../../middlewares/multer.js";
 import adminController from './admin.controller.js'
-import { isAdmin } from '../../middlewares/authorization.js';
+import { authorization, authorizeRoles } from '../../middlewares/authorization.js';
 
 const adminRouter = express.Router();
+adminRouter.use(authorization);
+adminRouter.use(authorizeRoles(['admin']));
 
-adminRouter.post('/doctor',isAdmin,upload.single('image'),adminController.createDoctor);
-adminRouter.post('/login',adminController.adminLogin);
+adminRouter.get('/dashboardStats',adminController.dashboardStats);
 export default adminRouter;

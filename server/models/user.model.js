@@ -11,11 +11,18 @@ const userSchema = new mongoose.Schema(
     gender: { type: String, default: "Not selected" },
     birthday: { type: String, default: "Not selected" },
     phone: { type: String, default: "" },
+    role: { type: String, default: 'patient' },
+    specialization: { type: String, required: false,},
+    experience: { type: Number, required: false },
+    degree: { type: String, required: false },
+    // availability: [{ type: mongoose.Schema.Types.ObjectId, ref: "Availability" }],
+    fees: { type: Number, required: false },
   },
   { timestamps: true }
 );
 
-const userModel =
-  mongoose.models.users || mongoose.model("User", userSchema, "users");
+const userModel = mongoose.models.users || mongoose.model("User", userSchema, "users");
 
-export default doctorModel;
+export default userModel;
+
+// name : 'Dr.Ricahrd James',email : 'richard@gmail.com',password : 'kums',address : 'USA Kurukku street',role : 'doctor'

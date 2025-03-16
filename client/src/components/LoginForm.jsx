@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   IconButton,
   InputAdornment,
@@ -9,10 +10,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
+import axios from "../../utils/axios";
+import { useAuth } from "../context/AuthContext.jsx";
+import { toast } from "react-toastify";
 
 const LoginForm = ({ type }) => {
   const [formData, setFormData] = useState({
@@ -23,6 +27,16 @@ const LoginForm = ({ type }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const { login,user } = useAuth();
+
+  useEffect(() => {
+    if (localStorage.getItem("isLoggedin")) {
+      if (user?.role === 'patient') navigate("/");
+      else if (user?.role === 'admin') navigate('/admin/dashboard');
+      else if (user?.role === 'doctor') navigate('/doctor/appointments');
+    }
+  },[]);
 
   const form = type === "login" ? "Login" : "Create account";
 
@@ -46,11 +60,39 @@ const LoginForm = ({ type }) => {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log(formData);
+      try {
+        if (type === "login") {
+          login(formData);
+        } else if (type === "create-account") {
+          const req = await axios.post("/users", formData);
+          console.log(await req.data);
+          if (req.status === 201) {
+            navigateWithLoader("/login");
+            toast.success(req.data?.msg || "User created");
+            setFormData({
+              email: "",
+              password: "",
+              name: "",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("API Error:", error);
+      } finally {
+        setLoading(false); 
+      }
     }
+  };
+
+  const navigateWithLoader = (path) => {
+    setLoading(true);
+    setTimeout(() => {
+      navigate(path);
+      setLoading(false);
+    }, 500); 
   };
 
   return (
@@ -79,9 +121,6 @@ const LoginForm = ({ type }) => {
         <Typography variant="h5" textAlign={"center"}>
           {form}
         </Typography>
-        {/* <Typography mt={-3} variant="subtitle1" sx={{ color: "gray" }}>
-          Kindly login to book appointments
-        </Typography> */}
         {type !== "login" && (
           <TextField
             required
@@ -136,8 +175,9 @@ const LoginForm = ({ type }) => {
         </FormControl>
         <Button
           variant="contained"
-          sx={{ backgroundColor: "#5f6FFF", textTransform: "none" ,py : 1.5}}
+          sx={{ backgroundColor: "#5f6FFF", textTransform: "none", py: 1.5 }}
           onClick={handleSubmit}
+          type="submit"
         >
           {form}
         </Button>
@@ -146,12 +186,37 @@ const LoginForm = ({ type }) => {
           onClick={() => {
             type === "login" ? navigate("/create-account") : navigate("/login");
           }}
-          sx={{ textDecoration: "none", color: "black", cursor: "pointer" ,'&:hover' : {textDecoration : 'underline'}}}
+          sx={{
+            textDecoration: "none",
+            color: "black",
+            cursor: "pointer",
+            "&:hover": { textDecoration: "underline" },
+          }}
         >
           {type === "login"
             ? "New User? click here to Create account"
             : "Already have an account? Login here"}
         </Typography>
+
+        {/* Loader Overlay (Optional) */}
+        {loading && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              borderRadius: 2,
+            }}
+          >
+            <CircularProgress size={40} />
+          </Box>
+        )}
       </Box>
     </Box>
   );

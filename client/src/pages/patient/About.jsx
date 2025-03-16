@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import { assets } from "../assets/assets";
+import { assets } from "../../assets/assets";
 
 const About = () => {
   const style = {
