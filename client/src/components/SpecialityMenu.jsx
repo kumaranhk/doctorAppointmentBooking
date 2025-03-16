@@ -10,7 +10,7 @@ const SpecialityMenu = () => {
                 <Typography variant='h5' sx={{ fontWeight: 'bold', mb: 3 }}>Find by Speciality</Typography>
                 <Typography variant='body2'>Simply browse through our extensive list of trusted doctors, schedule your appointment hassle-free.</Typography>
             </Box>
-            <Box sx={{ display: 'flex', gap: 5, alignItems: 'center', justifyContent: { sx: 'center' }, overflow: 'auto', pt: 3 }}>
+            <Box sx={{ display: 'flex', gap: 5, alignItems: 'center', justifyContent: { sx: 'center',md : 'center' }, overflow: 'auto', pt: 3 }}>
                 {specialityData.map((val, index) => (
                     <Box sx={{
                         textAlign: "center",

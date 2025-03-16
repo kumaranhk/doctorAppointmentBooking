@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongooseConnect from "./configs/mongoose-connect.js";
 import cloudinaryConnect from "./configs/cloudinary.js";
 import router from "./routes/routes.js";
+import logger from "./middlewares/logger.js";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ cloudinaryConnect();
 //middlewares
 app.use(express.json());
 app.use(cors());
+app.use(logger);
+app.use(express.urlencoded({ extended: false }));
 
 //endpoints
 app.use('/api',router);

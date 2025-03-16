@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../../context/AppContext';
 import { Badge, Box, Button, Chip, IconButton, Stack, Typography, useMediaQuery } from '@mui/material';
-import { specialityData } from '../assets/assets';
+import { specialityData } from '../../assets/assets';
 import CheckIcon from '@mui/icons-material/Check';
-import TopDoctors from '../components/TopDoctors';
+import TopDoctors from '../../components/TopDoctors';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 const Doctors = () => {
   const { speciality } = useParams();
-  const { doctors } = useContext(AppContext);
   const [selectedSpeciality, setSelectedSpeciality] = useState(null);
 
   const isMobile = useMediaQuery('(max-width: 600px)');
