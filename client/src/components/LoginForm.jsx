@@ -63,14 +63,15 @@ const LoginForm = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
+      setLoading(true);
       try {
         if (type === "login") {
           login(formData);
         } else if (type === "create-account") {
           const req = await axios.post("/users", formData);
-          console.log(await req.data);
+          // console.log(await req.data);
           if (req.status === 201) {
-            navigateWithLoader("/login");
+            navigate("/login");
             toast.success(req.data?.msg || "User created");
             setFormData({
               email: "",
@@ -81,18 +82,8 @@ const LoginForm = ({ type }) => {
         }
       } catch (error) {
         console.error("API Error:", error);
-      } finally {
-        setLoading(false); 
-      }
+      } 
     }
-  };
-
-  const navigateWithLoader = (path) => {
-    setLoading(true);
-    setTimeout(() => {
-      navigate(path);
-      setLoading(false);
-    }, 500); 
   };
 
   return (
@@ -143,7 +134,7 @@ const LoginForm = ({ type }) => {
           helperText={errors.email}
         />
         <FormControl variant="outlined" error={!!errors.password}>
-          <InputLabel htmlFor="outlined-adornment-password">
+          <InputLabel htmlFor="outlined-adornment-password" required>
             Password
           </InputLabel>
           <OutlinedInput
@@ -175,6 +166,7 @@ const LoginForm = ({ type }) => {
         </FormControl>
         <Button
           variant="contained"
+          loading={loading}
           sx={{ backgroundColor: "#5f6FFF", textTransform: "none", py: 1.5 }}
           onClick={handleSubmit}
           type="submit"
@@ -197,26 +189,6 @@ const LoginForm = ({ type }) => {
             ? "New User? click here to Create account"
             : "Already have an account? Login here"}
         </Typography>
-
-        {/* Loader Overlay (Optional) */}
-        {loading && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgba(255, 255, 255, 0.7)",
-              borderRadius: 2,
-            }}
-          >
-            <CircularProgress size={40} />
-          </Box>
-        )}
       </Box>
     </Box>
   );
